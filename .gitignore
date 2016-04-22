@@ -96,3 +96,7 @@ crashlytics-build.properties
 fabric.properties
 
 .idea
+
+# Semantic-ui
+semantic/dist/
+semantic/tasks/
