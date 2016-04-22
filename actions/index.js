@@ -1,5 +1,5 @@
 import * as types from '../constants';
-import { createClient } from 'node-impala';
+import fetch from 'isomorphic-fetch';
 
 /* Query Actions */
 
@@ -26,14 +26,13 @@ function queryFailure(error) {
   };
 }
 
-export function executeQuery(sql) {
+export function executeQuery(sql, url = '') {
   return dispatch => {
     dispatch(queryRequest(sql));
-    return createClient({
-      resultType: 'json-array'
-    }).query(sql)
+    return fetch(`${url}/api/impala/${sql}`)
+      .then(res => res.json())
       .then(result => dispatch(querySuccess(sql, result)))
-      .catch(error => dispatch(queryFailure(error)));
+      .catch(ex => dispatch(queryFailure(sql, ex)));
   };
 }
 
@@ -64,19 +63,15 @@ export function tableSelect(table) {
   };
 }
 
-export function tableInvalidate(table) {
-  return {
-    type: types.TABLE_INVALIDATE,
-    table
-  };
+export function tableInvalidate() {
+  return { type: types.TABLE_INVALIDATE };
 }
 
-function showTables() {
+function showTables(url = '') {
   return dispatch => {
     dispatch(tableRequest());
-    return createClient({
-      resultType: 'json-array'
-    }).query('show tables')
+    return fetch(`${url}/api/impala/show tables`)
+      .then(res => res.json())
       .then(tables => dispatch(tableSuccess(tables)))
       .catch(error => dispatch(tableFailure(error)));
   };
@@ -93,10 +88,10 @@ function shouldShowTables(state) {
   return tables.didInvalidate;
 }
 
-export function showTablesIfNeeded() {
+export function showTablesIfNeeded(url = '') {
   return (dispatch, getState) => {
     if (shouldShowTables(getState())) {
-      return dispatch(showTables());
+      return dispatch(showTables(url));
     }
   };
 }
@@ -129,12 +124,11 @@ function columnFailure(table, error) {
   };
 }
 
-function showColumns(table) {
+function showColumns(table, url = '') {
   return dispatch => {
     dispatch(columnRequest(table));
-    return createClient({
-      resultType: 'json-array'
-    }).query(`show column stats ${table}`)
+    return fetch(`${url}/api/impala/show column stats ${table}`)
+      .then(res => res.json())
       .then(columns => dispatch(columnSuccess(table, columns)))
       .catch(error => dispatch(columnFailure(table, error)));
   };
@@ -151,10 +145,10 @@ function shouldShowColumns(state, table) {
   return !columns.items.length > 0;
 }
 
-export function showColumnsIfNeeded(table) {
+export function showColumnsIfNeeded(table, url = '') {
   return (dispatch, getState) => {
     if (shouldShowColumns(getState(), table)) {
-      return dispatch(showColumns(table));
+      return dispatch(showColumns(table, url));
     }
   };
 }
