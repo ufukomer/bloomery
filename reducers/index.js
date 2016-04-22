@@ -1,4 +1,7 @@
 import * as types from '../constants';
+import columnsByTable from './columns';
+import query from './query';
+import { tables, selectedTable } from './tables';
 import { combineReducers } from 'redux';
 
 function errorMessage(state = null, action) {
@@ -14,7 +17,11 @@ function errorMessage(state = null, action) {
 }
 
 const rootReducer = combineReducers({
-  errorMessage
+  errorMessage,
+  columnsByTable,
+  tables,
+  selectedTable,
+  query
 });
 
 export default rootReducer;
