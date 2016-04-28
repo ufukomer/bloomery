@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.get('/api/impala/:sql', (req, res) => {
   impala.query(req.params.sql)
     .then(result => res.status(200).json(result))
-    .catch(error => res.status(500).json(error));
+    .catch(error => res.status(500).json(error.message));
 });
 
 app.listen(port, (err) => {
