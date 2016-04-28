@@ -2,8 +2,6 @@
 @import '~semantic-ui-reset/reset.css';
 @import '~semantic-ui-site/site.css';
 
-@import '~semantic-ui-button/button.css';
-
 /*  Semantic UI Elements */
 @import '~semantic-ui-button/button.css';
 @import '~semantic-ui-container/container.css';
@@ -55,7 +53,4 @@
 @import '~semantic-ui-tab/tab.css';
 @import '~semantic-ui-transition/transition.css';
 
-.ui#content {
-  padding-top: 55px;
-}
-
+@import './bloomery.css';
