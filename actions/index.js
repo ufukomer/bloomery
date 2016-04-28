@@ -19,10 +19,12 @@ function querySuccess(sql, result) {
   };
 }
 
-function queryFailure(error) {
+function queryFailure(sql, error) {
   return {
     type: types.QUERY_FAILURE,
-    error
+    receivedAt: Date.now(),
+    error,
+    sql
   };
 }
 
@@ -30,9 +32,34 @@ export function executeQuery(sql, url = '') {
   return dispatch => {
     dispatch(queryRequest(sql));
     return fetch(`${url}/api/impala/${sql}`)
-      .then(res => res.json())
-      .then(result => dispatch(querySuccess(sql, result)))
-      .catch(ex => dispatch(queryFailure(sql, ex)));
+      .then((response) => Promise.all([response.status, response.json()]))
+      .then((arr) => {
+        const status = arr[0];
+        const result = arr[1];
+        if (status >= 200 && status < 300) {
+          return dispatch(querySuccess(sql, result));
+        }
+        return dispatch(queryFailure(sql, result));
+      })
+      .catch((error) => {
+        queryFailure(`Execution failed: ${error}`);
+      });
+  };
+}
+
+export function queryDelete(id) {
+  return {
+    type: types.QUERY_DELETE,
+    id
+  };
+}
+
+export function querySave(sql, title, description) {
+  return {
+    type: types.QUERY_SAVE,
+    description,
+    title,
+    sql
   };
 }
 
@@ -71,9 +98,18 @@ function showTables(url = '') {
   return dispatch => {
     dispatch(tableRequest());
     return fetch(`${url}/api/impala/show tables`)
-      .then(res => res.json())
-      .then(tables => dispatch(tableSuccess(tables)))
-      .catch(error => dispatch(tableFailure(error)));
+      .then((response) => Promise.all([response.status, response.json()]))
+      .then((arr) => {
+        const status = arr[0];
+        const result = arr[1];
+        if (status >= 200 && status < 300) {
+          return dispatch(tableSuccess(result));
+        }
+        return dispatch(tableFailure(result));
+      })
+      .catch((error) => {
+        tableFailure(`Execution failed: ${error}`);
+      });
   };
 }
 
@@ -128,9 +164,18 @@ function showColumns(table, url = '') {
   return dispatch => {
     dispatch(columnRequest(table));
     return fetch(`${url}/api/impala/show column stats ${table}`)
-      .then(res => res.json())
-      .then(columns => dispatch(columnSuccess(table, columns)))
-      .catch(error => dispatch(columnFailure(table, error)));
+      .then((response) => Promise.all([response.status, response.json()]))
+      .then((arr) => {
+        const status = arr[0];
+        const result = arr[1];
+        if (status >= 200 && status < 300) {
+          return dispatch(columnSuccess(table, result));
+        }
+        return dispatch(columnFailure(table, result));
+      })
+      .catch((error) => {
+        columnFailure(`Execution failed: ${error}`);
+      });
   };
 }
 
