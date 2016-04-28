@@ -1,6 +1,8 @@
 export const QUERY_REQUEST = 'QUERY_REQUEST';
 export const QUERY_SUCCESS = 'QUERY_SUCCESS';
 export const QUERY_FAILURE = 'QUERY_FAILURE';
+export const QUERY_SAVE = 'QUERY_SAVE';
+export const QUERY_DELETE = 'QUERY_DELETE';
 
 export const TABLE_SELECT = 'TABLE_SELECT';
 export const TABLE_REQUEST = 'TABLE_REQUEST';
