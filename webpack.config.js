@@ -1,5 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+
+const port = 3003;
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -10,7 +12,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: `http://localhost:${port}/`
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -21,18 +23,37 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: [ 'babel' ],
+        loaders: ['babel'],
         exclude: /node_modules/,
         include: __dirname
       },
       {
-        test: /\.css?$/,
-        loaders: [ 'style', 'raw' ],
-        include: __dirname
+        test: /\.json$/,
+        loader: 'json'
       },
       {
-        test: /\.json$/,
-        loader: "json"
+        test: /\.css$/,
+        loader: 'style!css?sourceMap'
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=image/svg+xml'
       }
     ]
   }
