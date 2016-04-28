@@ -10,7 +10,8 @@ describe('query reducer', () => {
       isPending: false,
       result: [],
       lastQuery: '',
-      recentQueries: []
+      recentQueries: [],
+      savedQueries: []
     });
   });
 
@@ -54,27 +55,81 @@ describe('query reducer', () => {
           {
             id: 0,
             sql,
-            date: receivedAt
+            date: receivedAt,
+            status: true
           }
         ],
         isPending: false,
         lastQuery: sql,
         result
-      }
-    );
+      });
   });
 
   it('should handle QUERY_FAILURE', () => {
     const error = 'some error message';
+    const sql = 'select * from table';
+    const receivedAt = Date.now();
 
     expect(
       reducer({}, {
         type: types.QUERY_FAILURE,
-        error
+        receivedAt,
+        error,
+        sql
       })).toEqual({
         isPending: false,
+        lastQuery: sql,
+        recentQueries: [
+          {
+            id: 0,
+            sql,
+            date: receivedAt,
+            status: false
+          }
+        ],
         error
-      }
-    );
+      });
+  });
+
+  it('should handle QUERY_SAVE', () => {
+    const sql = 'select salary from sample_07 where salary > 80000';
+    const title = 'High salaries';
+    const description = 'Query get the salaries higher than 80000';
+
+    expect(
+      reducer({}, {
+        type: types.QUERY_SAVE,
+        description,
+        title,
+        sql
+      })).toEqual({
+        savedQueries: [
+          {
+            id: 0,
+            description,
+            title,
+            sql
+          }
+        ]
+      });
+  });
+
+  it('should handle QUERY_DELETE', () => {
+    expect(
+      reducer({
+        savedQueries: [
+          {
+            id: 0,
+            description: 'Query get the salaries higher than 80000',
+            title: 'High salaries',
+            sql: 'select salary from sample_07 where salary > 80000'
+          }
+        ]
+      }, {
+        type: types.QUERY_DELETE,
+        id: 0
+      })).toEqual({
+        savedQueries: []
+      });
   });
 });

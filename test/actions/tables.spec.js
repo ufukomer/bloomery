@@ -1,8 +1,10 @@
+import http from 'http';
 import expect from 'expect';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as actions from '../../actions/index';
 import * as types from '../../constants';
+import app from '../../server/server';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -22,17 +24,32 @@ describe('table actions', () => {
 
   describe('tableInvalidate', () => {
     it('should create TABLE_INVALIDATE', () => {
-      const table = 'customers';
-      const expectedAction = {
-        type: types.TABLE_INVALIDATE,
-        table
-      };
+      const expectedAction = { type: types.TABLE_INVALIDATE };
 
-      expect(actions.tableInvalidate(table)).toEqual(expectedAction);
+      expect(actions.tableInvalidate()).toEqual(expectedAction);
     });
   });
 
   describe('showTablesIfNeeded', () => {
+    const port = 3333;
+    const url = `http://localhost:${port}`;
+    const server = http.createServer(app);
+
+    before((done) => {
+      server.listen(port, (err) => {
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+
+    after((done) => {
+      server.close();
+      done();
+    });
+
     it('should create TABLE_REQUEST and TABLE_SUCCESS or TABLE_FAILURE', (done) => {
       const expectedAction = { type: types.TABLE_REQUEST };
       const store = mockStore({
@@ -43,7 +60,7 @@ describe('table actions', () => {
         }
       });
 
-      store.dispatch(actions.showTablesIfNeeded())
+      store.dispatch(actions.showTablesIfNeeded(url))
         .then(() => {
           const action = store.getActions();
 
@@ -65,7 +82,7 @@ describe('table actions', () => {
       });
 
       expect(
-        store.dispatch(actions.showTablesIfNeeded()) || 'undefined'
+        store.dispatch(actions.showTablesIfNeeded(url)) || 'undefined'
       ).toEqual('undefined');
     });
 
@@ -79,7 +96,7 @@ describe('table actions', () => {
         }
       });
 
-      store.dispatch(actions.showTablesIfNeeded())
+      store.dispatch(actions.showTablesIfNeeded(url))
         .then(() => {
           const action = store.getActions();
 

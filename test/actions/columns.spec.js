@@ -1,14 +1,35 @@
+import http from 'http';
 import expect from 'expect';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as actions from '../../actions/index';
 import * as types from '../../constants';
+import app from '../../server/server';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('column actions', () => {
   describe('showColumnsIfNeeded', () => {
+    const port = 3333;
+    const url = `http://localhost:${port}`;
+    const server = http.createServer(app);
+
+    before((done) => {
+      server.listen(port, (err) => {
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+
+    after((done) => {
+      server.close();
+      done();
+    });
+
     it('should create COLUMN_REQUEST and COLUMN_SUCCESS or COLUMN_FAILURE', (done) => {
       const table = 'customers';
       const expectedAction = {
@@ -19,7 +40,7 @@ describe('column actions', () => {
         columnsByTable: {}
       });
 
-      store.dispatch(actions.showColumnsIfNeeded(table))
+      store.dispatch(actions.showColumnsIfNeeded(table, url))
         .then(() => {
           const action = store.getActions();
 
@@ -44,7 +65,7 @@ describe('column actions', () => {
       });
 
       expect(
-        store.dispatch(actions.showColumnsIfNeeded(table)) || 'undefined'
+        store.dispatch(actions.showColumnsIfNeeded(table, url)) || 'undefined'
       ).toEqual('undefined');
     });
 
@@ -63,7 +84,7 @@ describe('column actions', () => {
         }
       });
 
-      store.dispatch(actions.showColumnsIfNeeded(table))
+      store.dispatch(actions.showColumnsIfNeeded(table, url))
         .then(() => {
           const action = store.getActions();
 
