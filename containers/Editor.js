@@ -4,23 +4,44 @@ import $ from 'jquery';
 import jQuery from 'jquery';
 window.jQuery = jQuery;
 import { executeQuery } from '../actions';
-import AceEditor from 'react-ace';
+import Button from '../components/Button';
+import Menu from '../components/Menu';
+import Item from '../components/Item';
+import TabSegment from '../components/TabSegment';
+import RecentQueryTable from '../components/RecentQueryTable';
+import AceEditor from '../components/AceEditor';
+import Icon from '../components/Icon';
 
 import 'brace/mode/sql';
 import 'brace/theme/dawn';
 import 'brace/ext/language_tools';
 
-const options = {
-  enableBasicAutocompletion: true,
-  enableLiveAutocompletion: true
-};
-
 export default class Editor extends Component {
+
+  static propTypes = {
+    result: PropTypes.array.isRequired,
+    isPending: PropTypes.bool.isRequired,
+    lastQuery: PropTypes.string.isRequired,
+    recentQueries: PropTypes.array.isRequired,
+    executeQuery: PropTypes.func.isRequired
+  }
+
   componentDidMount() {
+    $('#save-icon').popup({
+      on: 'hover',
+      lastResort: true
+    });
     $('.menu .item').tab();
   }
 
   render() {
+    const {
+      isPending,
+      lastQuery,
+      result,
+      recentQueries
+    } = this.props;
+
     return (
       <div>
         <AceEditor
@@ -28,32 +49,78 @@ export default class Editor extends Component {
           theme="dawn"
           width="auto"
           height="300px"
-          editorProps={{ $blockScrolling: true }}
+          value={lastQuery}
+          editorProps={{ $blockScrolling: Infinity }}
           showPrintMargin={false}
           enableBasicAutocompletion
+          ref="editor"
         />
-        <div className="ui secondary pointing menu">
-          <a className="item active" data-tab="first">Recent Queries</a>
-          <a className="item" data-tab="second">Second</a>
-          <a className="item" data-tab="third">Third</a>
-          <div className="right menu">
-            <div className="item">
-              <div className="ui transparent icon input">
-                <button className="ui button">Execute</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="ui bottom attached tab segment active" data-tab="first">
-          First
-        </div>
-        <div className="ui bottom attached tab segment" data-tab="second">
+        <Menu menuType="secondary pointing">
+          <Item type="link" active dataTab="first">Recent Queries</Item>
+          <Item type="link" dataTab="second">Saved Queries</Item>
+          <Item type="link" dataTab="third">Results</Item>
+          <Menu menuType="right">
+            <Item type="link">
+              <Button
+                id="save-icon"
+                buttonType="icon"
+                dataContent="Save the query"
+              >
+                <Icon icon="save"/>
+              </Button>
+            </Item>
+            <Item type="link">
+              <Button
+                isPending={isPending}
+                onClick={() => {
+                  const currentQuery = this.refs.editor.getQuery()
+                      .replace(/(?:\r\n|\r|\n)/g, ' \n');
+                  return this.props.executeQuery(currentQuery);
+                }}
+              >
+                Execute
+              </Button>
+            </Item>
+          </Menu>
+        </Menu>
+
+        <TabSegment active dataTab="first">
+          <RecentQueryTable
+            result={recentQueries}
+            onQueryClick={(sql) => this.refs.editor.setQuery(sql)}
+          />
+        </TabSegment>
+        <TabSegment dataTab="second">
           Second
-        </div>
-        <div className="ui bottom attached tab segment" data-tab="third">
+        </TabSegment>
+        <TabSegment dataTab="third">
           Third
-        </div>
+        </TabSegment>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { query } = state;
+
+  return {
+    isPending: query.isPending,
+    lastQuery: query.lastQuery,
+    result: query.result,
+    recentQueries: query.recentQueries
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  executeQuery: (sql) => {
+    if (sql.trim() !== '') {
+      dispatch(executeQuery(sql));
+    }
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Editor);

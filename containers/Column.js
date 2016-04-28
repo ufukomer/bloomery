@@ -1,14 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { showColumnsIfNeeded } from '../actions';
-import ListItem from '../components/ListItem';
+import Item from '../components/Item';
 import List from '../components/List';
+import Loader from '../components/Loader';
 
 class Column extends Component {
+
+  static propTypes = {
+    isPending: PropTypes.bool.isRequired,
+    columns: PropTypes.array.isRequired,
+    selectedTable: PropTypes.string.isRequired,
+    showColumns: PropTypes.func.isRequired
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedTable !== this.props.selectedTable) {
-      const { dispatch, selectedTable } = nextProps;
-      dispatch(showColumnsIfNeeded(selectedTable));
+      const { showColumns, selectedTable } = nextProps;
+      showColumns(selectedTable);
     }
   }
 
@@ -16,23 +25,23 @@ class Column extends Component {
     const { isPending, columns } = this.props;
     const isEmpty = columns.length === 0;
 
+    let emptyContent;
+    if (isPending) {
+      emptyContent = <Loader />;
+    } else {
+      emptyContent = <div>No content</div>;
+    }
+
     return (
       <div>
-        <List title="Columns">
-          {isEmpty
-            ? (isPending ? <div className="ui active inline loader"></div> : <div>No content</div>)
-            :
-            <div className="ui middle aligned divided list">
-              {columns.map((column, i) =>
-                <ListItem
-                  key={i}
-                  name={column.name}
-                  type={column.type}
-                />
-              )}
-            </div>
-          }
-        </List>
+        <Item itemType="header">Columns</Item>
+        {isEmpty
+          ? emptyContent :
+          <List
+            items={columns}
+            listType="middle aligned divided"
+          />
+        }
       </div>
     );
   }
@@ -55,4 +64,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Column);
+const mapDispatchToProps = (dispatch) => ({
+  showColumns: (selectedTable) => {
+    dispatch(showColumnsIfNeeded(selectedTable));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Column);

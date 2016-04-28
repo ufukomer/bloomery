@@ -1,52 +1,81 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { showTablesIfNeeded, tableInvalidate, tableSelect } from '../actions';
-import MenuItem from '../components/MenuItem';
+import $ from 'jquery';
+import jQuery from 'jquery';
+window.jQuery = jQuery;
+import {
+  showTablesIfNeeded,
+  tableInvalidate,
+  tableSelect
+} from '../actions';
+import Item from '../components/Item';
 import Menu from '../components/Menu';
+import Icon from '../components/Icon';
+import Button from '../components/Button';
+import Loader from '../components/Loader';
 
 class Table extends Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRefreshClick = this.handleRefreshClick.bind(this);
+
+  static propTypes = {
+    tables: PropTypes.array.isRequired,
+    isPending: PropTypes.bool.isRequired,
+    showTables: PropTypes.func.isRequired,
+    onItemClick: PropTypes.func.isRequired,
+    handleRefresh: PropTypes.func.isRequired
   }
 
   componentDidMount() {
-    this.props.dispatch(showTablesIfNeeded());
-  }
-
-  handleChange(table) {
-    this.props.dispatch(tableSelect(table));
-  }
-
-  handleRefreshClick(e) {
-    e.preventDefault();
-
-    this.props.dispatch(tableInvalidate());
+    this.props.showTables();
   }
 
   render() {
-    const { tables, isPending } = this.props;
+    const {
+      tables,
+      isPending,
+      showTables,
+      onItemClick,
+      handleRefresh
+    } = this.props;
     const isEmpty = tables.length === 0;
 
+    let emptyContent;
+    if (isPending) {
+      emptyContent = <Loader />;
+    } else {
+      emptyContent = <div>No content</div>;
+    }
+
     return (
-      <div>
-        <Menu title="Tables">
-          {isEmpty
-            ? (isPending ? <h4>Loading...</h4> : <h4>No content</h4>)
-            :
+        <Menu
+          title="Tables"
+          menuType="demo vertical text"
+        >
+          <Item itemType="header">
+            <span>Tables</span>
+            <Button
+              onClick={() => {
+                handleRefresh();
+                showTables();
+              }}
+              buttonType="circular basic icon"
+              buttonSize="mini"
+            >
+              <Icon icon="refresh" />
+            </Button>
+          </Item>
+
+          {isEmpty ? emptyContent :
             <div>
               {tables.map((table, i) =>
-                <MenuItem
+                <Item
+                  type="link"
                   key={i}
-                  name={table}
-                  onClick={() => this.handleChange(table)}
-                />
+                  onClick={() => onItemClick(table)}
+                >{table}</Item>
               )}
             </div>
           }
         </Menu>
-      </div>
     );
   }
 }
@@ -60,4 +89,19 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Table);
+const mapDispatchToProps = (dispatch) => ({
+  onItemClick: (table) => {
+    dispatch(tableSelect(table));
+  },
+  showTables: () => {
+    dispatch(showTablesIfNeeded());
+  },
+  handleRefresh: () => {
+    dispatch(tableInvalidate());
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Table);

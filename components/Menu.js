@@ -1,12 +1,30 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+import classnames from 'classnames';
 
-export default class Menu extends Component {
-  render() {
-    return (
-      <div className="ui vertical text menu">
-        <div className="header item">{this.props.title}</div>
-          {this.props.children}
-      </div>
-    );
-  }
-}
+const Menu = ({
+  menuType,
+  children
+}) => {
+  let menuClass = classnames({
+    ui: !menuType.includes('right'),
+    menu: true,
+    [menuType]: menuType
+  });
+
+  return (
+    <div className={menuClass}>
+      {children}
+    </div>
+  );
+};
+
+Menu.propTypes = {
+  menuType: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.array
+  ])
+};
+
+export default Menu;
