@@ -44,10 +44,17 @@ describe('column actions', () => {
         .then(() => {
           const action = store.getActions();
 
-          expect(action[0]).toEqual(expectedAction);
-          expect(action[1].type).toContain('COLUMN_');
-          expect(action[1].columns || action[1].error).toBeAn('object');
-          expect(action[1].table).toEqual(table);
+          if (action[1].error) {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('COLUMN_FAILURE');
+            expect(action[1].error).toBeAn('string');
+            expect(action[1].table).toEqual(table);
+          } else {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('COLUMN_SUCCESS');
+            expect(action[1].columns).toBeAn('object');
+            expect(action[1].table).toEqual(table);
+          }
         })
         .then(done)
         .catch(done);
@@ -88,10 +95,17 @@ describe('column actions', () => {
         .then(() => {
           const action = store.getActions();
 
-          expect(action[0]).toEqual(expectedAction);
-          expect(action[1].type).toContain('COLUMN_');
-          expect(action[1].columns || action[1].error).toBeAn('object');
-          expect(action[1].table).toEqual(table);
+          if (action[1].error) {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('COLUMN_FAILURE');
+            expect(action[1].error).toBeAn('string');
+            expect(action[1].table).toEqual(table);
+          } else {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('COLUMN_SUCCESS');
+            expect(action[1].columns).toBeAn('object');
+            expect(action[1].table).toEqual(table);
+          }
         })
         .then(done)
         .catch(done);

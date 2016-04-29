@@ -74,11 +74,18 @@ describe('query actions', () => {
         .then(() => {
           const action = store.getActions();
 
-          expect(action[0]).toEqual(expectedAction);
-          expect(action[1].type).toContain('QUERY_');
-          expect(action[1].receivedAt || 0).toBeA('number');
-          expect(action[1].result || action[1].error).toBeAn('object');
-          expect(action[1].sql || sql).toBeA('string');
+          if (action[1].error) {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('QUERY_FAILURE');
+            expect(action[1].error).toBeAn('string');
+            expect(action[1].sql).toBeA('string');
+          } else {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('QUERY_SUCCESS');
+            expect(action[1].receivedAt).toBeA('number');
+            expect(action[1].result).toBeAn('object');
+            expect(action[1].sql).toBeA('string');
+          }
         })
         .then(done)
         .catch(done);

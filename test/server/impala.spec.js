@@ -27,8 +27,8 @@ describe('impala rest api', () => {
     request.get(`http://localhost:${port}/api/impala/${sql}`)
       .end((err, res) => {
         if (err) {
-          expect(err.response.body.message).toExist();
-          expect(err.response.body.message).toBeA('string');
+          expect(err.response.body).toExist();
+          expect(err.response.body).toBeA('string');
         } else {
           expect(res.body).toBeAn('object');
         }

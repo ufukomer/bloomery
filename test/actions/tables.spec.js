@@ -64,9 +64,15 @@ describe('table actions', () => {
         .then(() => {
           const action = store.getActions();
 
-          expect(action[0]).toEqual(expectedAction);
-          expect(action[1].type).toContain('TABLE_');
-          expect(action[1].items || action[1].error).toBeAn('object');
+          if (action[1].error) {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('TABLE_FAILURE');
+            expect(action[1].error).toBeAn('string');
+          } else {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('TABLE_SUCCESS');
+            expect(action[1].items).toBeAn('object');
+          }
         })
         .then(done)
         .catch(done);
@@ -100,9 +106,15 @@ describe('table actions', () => {
         .then(() => {
           const action = store.getActions();
 
-          expect(action[0]).toEqual(expectedAction);
-          expect(action[1].type).toContain('TABLE_');
-          expect(action[1].items || action[1].error).toBeAn('object');
+          if (action[1].error) {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('TABLE_FAILURE');
+            expect(action[1].error).toBeAn('string');
+          } else {
+            expect(action[0]).toEqual(expectedAction);
+            expect(action[1].type).toContain('TABLE_SUCCESS');
+            expect(action[1].items).toBeAn('object');
+          }
         })
         .then(done)
         .catch(done);
