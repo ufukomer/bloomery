@@ -63,6 +63,13 @@ export function querySave(sql, title, description) {
   };
 }
 
+export function saveCurrentText(text) {
+  return {
+    type: types.SAVE_TEXT,
+    text
+  };
+}
+
 /* Table Actions */
 
 function tableRequest() {

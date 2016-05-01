@@ -2,6 +2,7 @@ import * as types from '../constants';
 import columnsByTable from './columns';
 import query from './query';
 import { tables, selectedTable } from './tables';
+import text from './text';
 import { combineReducers } from 'redux';
 
 function errorMessage(state = null, action) {
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   columnsByTable,
   tables,
   selectedTable,
-  query
+  query,
+  text
 });
 
 export default rootReducer;
