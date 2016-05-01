@@ -10,8 +10,11 @@ window.jQuery = jQuery;
 require('./assets/css/index.css');
 
 require('./semantic/dist/components/tab');
+require('./semantic/dist/components/form');
+require('./semantic/dist/components/modal');
 require('./semantic/dist/components/popup');
 require('./semantic/dist/components/state');
+require('./semantic/dist/components/dimmer');
 require('./semantic/dist/components/transition');
 
 const store = configureStore();
