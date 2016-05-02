@@ -14,7 +14,6 @@ const Button = ({
     ui: true,
     button: true,
     loading: isPending,
-    disabled: isPending,
     [buttonSize]: buttonSize,
     [buttonType]: buttonType
   });
@@ -22,6 +21,7 @@ const Button = ({
   return (
     <button
       id={id}
+      disabled={isPending}
       onClick={onClick}
       className={btnClass}
       data-content={dataContent}
