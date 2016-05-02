@@ -8,6 +8,7 @@ const SavedQueryItem = ({
   title,
   description,
   onRunClick,
+  isPending,
   onDeleteClick
 }) => {
   let itemClass = classnames({});
@@ -27,6 +28,7 @@ const SavedQueryItem = ({
         <Button
           buttonSize="tiny" buttonType="right floated"
           onClick={onRunClick}
+          isPending={isPending}
         >
           Run
         </Button>
@@ -45,6 +47,7 @@ SavedQueryItem.propTypes = {
   id: PropTypes.string,
   query: PropTypes.string,
   title: PropTypes.string,
+  isPending: PropTypes.bool,
   description: PropTypes.string,
   onRunClick: PropTypes.func,
   onDeleteClick: PropTypes.func
