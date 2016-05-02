@@ -90,6 +90,7 @@ export default class Editor extends Component {
     const isRecentQueriesEmpty = !recentQueries.length > 0;
     const isSavedQueriesEmpty = !savedQueries.length > 0;
     const isResultEmpty = !result.length > 0;
+    const isCurrentTextEmpty = currentText.trim() === '';
 
     return (
       <div>
@@ -118,9 +119,7 @@ export default class Editor extends Component {
                 onClick={() => {
                   const editorText = this.refs._editor.getQuery()
                       .replace(/(?:\r\n|\r|\n)/g, ' \n');
-                  const formEditorText = this.refs._form_editor.getQuery()
-                      .replace(/(?:\r\n|\r|\n)/g, ' \n');
-                  if (editorText !== formEditorText) {
+                  if (editorText !== currentText) {
                     this.props.saveCurrentText(editorText);
                   }
                 }}
@@ -155,20 +154,12 @@ export default class Editor extends Component {
           <Modal.Content>
             <Form id="save-query-form">
               <Field label="Query">
-                <AceEditor
-                  mode="sql"
-                  theme="dawn"
-                  width="auto"
-                  height="100px"
-                  width="100%"
-                  showGutter={false}
-                  highlightActiveLine={false}
-                  value={currentText}
-                  editorProps={{ $blockScrolling: Infinity }}
-                  showPrintMargin={false}
-                  enableBasicAutocompletion
-                  ref="_form_editor"
-                />
+                <Message visible>
+                  {isCurrentTextEmpty ?
+                    <span>Please write a query on editor!</span> :
+                    <code>{currentText}</code>
+                  }
+                </Message>
               </Field>
               <Field label="Title">
                 <input
@@ -190,13 +181,11 @@ export default class Editor extends Component {
               <Button
                 buttonType="submit"
                 onClick={() => {
-                  const currentQuery = this.refs._form_editor.getQuery()
-                      .replace(/(?:\r\n|\r|\n)/g, ' \n');
                   const title = this.refs._title.value;
-                  if (currentQuery.trim() !== '' && title.trim() !== '') {
+                  if (currentText.trim() !== '' && title.trim() !== '') {
                     try {
                       return this.props.querySave(
-                        currentQuery,
+                        currentText,
                         title,
                         this.refs._description.value
                       );
@@ -222,15 +211,17 @@ export default class Editor extends Component {
         </Modal>
 
         <TabSegment active dataTab="first">
-          {isRecentQueriesEmpty ?
-            <Message visible>
-              <p>There is no recent query yet.</p>
-            </Message> :
-            <RecentQueryTable
-              result={recentQueries}
-              onQueryClick={(sql) => this.refs._editor.setQuery(sql)}
-            />
-          }
+          <ScrollPane>
+            {isRecentQueriesEmpty ?
+              <Message visible>
+                <p>There is no recent query yet.</p>
+              </Message> :
+              <RecentQueryTable
+                result={recentQueries}
+                onQueryClick={(sql) => this.refs._editor.setQuery(sql)}
+              />
+            }
+          </ScrollPane>
         </TabSegment>
         <TabSegment dataTab="second">
           <ScrollPane>
@@ -246,6 +237,7 @@ export default class Editor extends Component {
                         title={query.title}
                         description={query.description}
                         query={query.sql}
+                        isPending={isPending}
                         onRunClick={() => {
                           const editorText = this.refs._editor.getQuery()
                               .replace(/(?:\r\n|\r|\n)/g, ' \n');
@@ -276,12 +268,10 @@ export default class Editor extends Component {
               <Message visible>
                 <p>There are no results yet.</p>
               </Message> :
-              <ScrollPane>
-                <QueryResultTable
-                  tableType="single line"
-                  result={result}
-                />
-              </ScrollPane>
+              <QueryResultTable
+                tableType="single line"
+                result={result}
+              />
             }
           </ScrollPane>
         </TabSegment>
