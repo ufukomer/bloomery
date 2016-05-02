@@ -37,10 +37,18 @@ class Column extends Component {
         <Item itemType="header">Columns</Item>
         {isEmpty
           ? emptyContent :
-          <List
-            items={columns}
-            listType="middle aligned divided"
-          />
+          <List listType="middle aligned divided">
+            {columns.map((column, i) =>
+              <List.Item key={i}>
+                <List.Content contentType="right floated">
+                  {column.type}
+                </List.Content>
+                <List.Content>
+                  {column.name}
+                </List.Content>
+              </List.Item>
+            )}
+          </List>
         }
       </div>
     );
