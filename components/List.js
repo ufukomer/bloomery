@@ -1,35 +1,32 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
+import ListItem from './ListItem';
+import ListContent from './ListContent';
 
-const List = ({
-  items,
-  listType
-}) => {
-  let listClass = classnames({
-    ui: true,
-    list: true,
-    [listType]: listType
-  });
+class List extends Component {
 
-  return (
-    <div className={listClass}>
-      {items.map((item, i) =>
-        <div className="item" key={i}>
-          <div className="right floated content">
-            {item.type}
-          </div>
-          <div className="content">
-            {item.name}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+  static propTypes = {
+    listType: PropTypes.string,
+    children: PropTypes.any
+  }
 
-List.propTypes = {
-  items: PropTypes.array,
-  listType: PropTypes.string
-};
+  static Item = ListItem
+  static Content = ListContent
+
+  render() {
+    const { listType } = this.props;
+    let listClass = classnames({
+      ui: true,
+      list: true,
+      [listType]: listType
+    });
+
+    return (
+      <div className={listClass}>
+        {this.props.children}
+      </div>
+    );
+  }
+}
 
 export default List;
