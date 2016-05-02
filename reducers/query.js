@@ -77,6 +77,7 @@ export default function query(state = {
     case QUERY_SAVE:
     case QUERY_DELETE:
       return {
+        ...state,
         savedQueries: savedQuery(state.savedQueries, action)
       };
     default:
