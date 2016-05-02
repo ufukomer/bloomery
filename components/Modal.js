@@ -7,6 +7,12 @@ import Icon from '../components/Icon';
 
 class Modal extends Component {
 
+  static propTypes = {
+    children: PropTypes.any,
+    closeIcon: PropTypes.bool,
+    modalSize: PropTypes.string
+  }
+
   static Content = ModalContent
   static Header = ModalHeader
   static Footer = ModalFooter
@@ -34,11 +40,5 @@ class Modal extends Component {
     );
   }
 }
-
-Modal.propTypes = {
-  children: PropTypes.any,
-  closeIcon: PropTypes.bool,
-  modalSize: PropTypes.string
-};
 
 export default Modal;
