@@ -3,17 +3,25 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import jQuery from 'jquery';
 window.jQuery = jQuery;
-import { executeQuery, querySave, saveCurrentText } from '../actions';
-import Button from '../components/Button';
+import {
+  executeQuery, querySave,
+  saveCurrentText, queryDelete
+} from '../actions';
 import Menu from '../components/Menu';
 import Item from '../components/Item';
-import TabSegment from '../components/TabSegment';
-import RecentQueryTable from '../components/RecentQueryTable';
-import AceEditor from '../components/AceEditor';
+import List from '../components/List';
 import Icon from '../components/Icon';
-import Modal from '../components/Modal';
 import Form from '../components/Form';
 import Field from '../components/Field';
+import Modal from '../components/Modal';
+import Button from '../components/Button';
+import Message from '../components/Message';
+import AceEditor from '../components/AceEditor';
+import ScrollPane from '../components/ScrollPane';
+import TabSegment from '../components/TabSegment';
+import SavedQueryItem from '../components/SavedQueryItem';
+import RecentQueryTable from '../components/RecentQueryTable';
+import QueryResultTable from '../components/QueryResultTable';
 
 import 'brace/mode/sql';
 import 'brace/theme/dawn';
@@ -27,7 +35,9 @@ export default class Editor extends Component {
     lastQuery: PropTypes.string,
     currentText: PropTypes.string,
     recentQueries: PropTypes.array,
+    savedQueries: PropTypes.array,
     querySave: PropTypes.func.isRequired,
+    queryDelete: PropTypes.func.isRequired,
     executeQuery: PropTypes.func.isRequired,
     saveCurrentText: PropTypes.func.isRequired
   }
@@ -67,24 +77,19 @@ export default class Editor extends Component {
     $('.menu .item').tab();
   }
 
-  componentWillUpdate(nextProps) {
-    const currentQuery = this.refs._editor.getQuery()
-      .replace(/(?:\r\n|\r|\n)/g, ' \n');
-    if (currentQuery.trim() !== '') {
-      if (nextProps.currentText !== currentQuery) {
-        nextProps.saveCurrentText(currentQuery);
-      }
-    }
-  }
-
   render() {
     const {
       result,
       isPending,
       lastQuery,
       currentText,
-      recentQueries
+      recentQueries,
+      savedQueries
     } = this.props;
+
+    const isRecentQueriesEmpty = !recentQueries.length > 0;
+    const isSavedQueriesEmpty = !savedQueries.length > 0;
+    const isResultEmpty = !result.length > 0;
 
     return (
       <div>
@@ -111,9 +116,13 @@ export default class Editor extends Component {
                 buttonType="icon"
                 dataContent="Save the query"
                 onClick={() => {
-                  const currentQuery = this.refs._editor.getQuery()
+                  const editorText = this.refs._editor.getQuery()
                       .replace(/(?:\r\n|\r|\n)/g, ' \n');
-                  this.props.saveCurrentText(currentQuery);
+                  const formEditorText = this.refs._form_editor.getQuery()
+                      .replace(/(?:\r\n|\r|\n)/g, ' \n');
+                  if (editorText !== formEditorText) {
+                    this.props.saveCurrentText(editorText);
+                  }
                 }}
               >
                 <Icon icon="save" />
@@ -123,9 +132,12 @@ export default class Editor extends Component {
               <Button
                 isPending={isPending}
                 onClick={() => {
-                  const currentQuery = this.refs._editor.getQuery()
+                  const editorText = this.refs._editor.getQuery()
                       .replace(/(?:\r\n|\r|\n)/g, ' \n');
-                  return this.props.executeQuery(currentQuery);
+                  if (editorText !== currentText) {
+                    this.props.saveCurrentText(editorText);
+                  }
+                  return this.props.executeQuery(editorText);
                 }}
               >
                 Execute
@@ -175,18 +187,25 @@ export default class Editor extends Component {
                   placeholder="Description"
                 />
               </Field>
-              <Button buttonType="submit"
+              <Button
+                buttonType="submit"
                 onClick={() => {
                   const currentQuery = this.refs._form_editor.getQuery()
                       .replace(/(?:\r\n|\r|\n)/g, ' \n');
-                  if (currentQuery.trim() !== '') {
-                    $('.ui .modal').modal('hide');
-
-                    return this.props.querySave(
-                      currentQuery,
-                      this.refs._title.value,
-                      this.refs._description.value
-                    );
+                  const title = this.refs._title.value;
+                  if (currentQuery.trim() !== '' && title.trim() !== '') {
+                    try {
+                      return this.props.querySave(
+                        currentQuery,
+                        title,
+                        this.refs._description.value
+                      );
+                    } catch (error) {
+                      console.error(error);
+                    } finally {
+                      $('.ui .modal').modal('hide');
+                      $('#save-query-form.ui.form').form('clear');
+                    }
                   }
                 }}
               >
@@ -203,16 +222,68 @@ export default class Editor extends Component {
         </Modal>
 
         <TabSegment active dataTab="first">
-          <RecentQueryTable
-            result={recentQueries}
-            onQueryClick={(sql) => this.refs._editor.setQuery(sql)}
-          />
+          {isRecentQueriesEmpty ?
+            <Message visible>
+              <p>There is no recent query yet.</p>
+            </Message> :
+            <RecentQueryTable
+              result={recentQueries}
+              onQueryClick={(sql) => this.refs._editor.setQuery(sql)}
+            />
+          }
         </TabSegment>
         <TabSegment dataTab="second">
-          Second
+          <ScrollPane>
+            {isSavedQueriesEmpty ?
+              <Message visible>
+                <p>There is no saved query yet.</p>
+              </Message> :
+              <List listType="middle aligned">
+                {savedQueries.map((query, i) =>
+                  <List.Item key={i}>
+                    <List.Content>
+                      <SavedQueryItem
+                        title={query.title}
+                        description={query.description}
+                        query={query.sql}
+                        onRunClick={() => {
+                          const editorText = this.refs._editor.getQuery()
+                              .replace(/(?:\r\n|\r|\n)/g, ' \n');
+                          if (editorText !== currentText) {
+                            this.props.saveCurrentText(editorText);
+                          }
+                          return this.props.executeQuery(query.sql);
+                        }}
+                        onDeleteClick={() => {
+                          const editorText = this.refs._editor.getQuery()
+                              .replace(/(?:\r\n|\r|\n)/g, ' \n');
+                          if (editorText !== currentText) {
+                            this.props.saveCurrentText(editorText);
+                          }
+                          return this.props.queryDelete(query.id);
+                        }}
+                      />
+                    </List.Content>
+                  </List.Item>
+                )}
+              </List>
+            }
+          </ScrollPane>
         </TabSegment>
         <TabSegment dataTab="third">
-          Third
+          <ScrollPane>
+            {isResultEmpty ?
+              <Message visible>
+                <p>There are no results yet.</p>
+              </Message> :
+              <ScrollPane>
+                <QueryResultTable
+                  tableType="single line"
+                  result={result}
+                />
+              </ScrollPane>
+            }
+          </ScrollPane>
         </TabSegment>
       </div>
     );
@@ -227,7 +298,8 @@ const mapStateToProps = (state) => {
     result: query.result,
     isPending: query.isPending,
     lastQuery: query.lastQuery,
-    recentQueries: query.recentQueries
+    recentQueries: query.recentQueries,
+    savedQueries: query.savedQueries
   };
 };
 
@@ -242,10 +314,11 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(querySave(sql, title, description));
     }
   },
+  queryDelete: (id) => {
+    dispatch(queryDelete(id));
+  },
   saveCurrentText: (text) => {
-    if (text.trim() !== '') {
-      dispatch(saveCurrentText(text));
-    }
+    dispatch(saveCurrentText(text));
   }
 });
 
