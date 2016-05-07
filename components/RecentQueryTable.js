@@ -3,13 +3,15 @@ import classnames from 'classnames';
 
 const RecentQueryTable = ({
   result = [],
+  tableType,
   onQueryClick
 }) => {
   let queryTableClass = classnames({
     ui: true,
     celled: true,
     striped: true,
-    table: true
+    table: true,
+    [tableType]: tableType
   });
 
   return (
@@ -43,6 +45,7 @@ const RecentQueryTable = ({
 };
 
 RecentQueryTable.propTypes = {
+  tableType: PropTypes.string,
   onQueryClick: PropTypes.func,
   result: PropTypes.oneOfType([
     PropTypes.string,

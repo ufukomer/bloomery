@@ -5,7 +5,6 @@ const Loader = () => {
   let loaderClass = classnames({
     ui: true,
     active: true,
-    inline: true,
     loader: true
   });
 

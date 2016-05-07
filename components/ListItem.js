@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
-const ListItem = ({ children, key }) => {
+const ListItem = ({ children, key, listItemType }) => {
   let itemClass = classnames({
-    item: true
+    item: true,
+    [listItemType]: listItemType
   });
 
   return (
@@ -15,7 +16,8 @@ const ListItem = ({ children, key }) => {
 
 ListItem.propTypes = {
   key: PropTypes.number,
-  children: PropTypes.any
+  children: PropTypes.any,
+  listItemType: PropTypes.string
 };
 
 export default ListItem;

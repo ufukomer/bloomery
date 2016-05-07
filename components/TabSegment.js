@@ -10,9 +10,7 @@ const TabSegment = ({
     active,
     ui: true,
     tab: true,
-    bottom: true,
-    segment: true,
-    attached: true
+    bottom: true
   });
 
   return (

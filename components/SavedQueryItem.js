@@ -15,8 +15,8 @@ const SavedQueryItem = ({
 
   return (
     <div id={id} className={itemClass}>
-      <div className="header">{title}</div>
-      <div className="meta">
+      <div className="saved-query header">{title}</div>
+      <div className="saved-query meta">
         <span className="cinema">{description}</span>
       </div>
       <div className="description">

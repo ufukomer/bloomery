@@ -3,11 +3,13 @@ import classnames from 'classnames';
 
 const Message = ({
   visible,
+  negative,
   children
 }) => {
   let messageClass = classnames({
     ui: true,
     visible,
+    negative,
     message: true
   });
 
@@ -20,7 +22,8 @@ const Message = ({
 
 Message.propTypes = {
   visible: PropTypes.bool,
-  children: PropTypes.any
+  children: PropTypes.any,
+  negative: PropTypes.bool
 };
 
 export default Message;
