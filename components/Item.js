@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
 const Item = ({
+  id,
   type,
   active,
   dataTab,
@@ -20,6 +21,7 @@ const Item = ({
     case 'link':
       content = (
         <a
+          id={id}
           className={itemClass}
           data-tab={dataTab}
           onClick={onClick}
