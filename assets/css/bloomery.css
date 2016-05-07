@@ -1,7 +1,117 @@
-/* Header padding */
+/* Grid */
+
+#app {
+  min-width:1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+
 .ui#content {
   padding-top: 55px;
 }
+
+/* Saved Queries */
+
+.saved-query-item {
+  margin: 10px auto;
+  width: 90%;
+}
+
+.saved-query.header {
+  padding-bottom: 6px;
+}
+
+.saved-query.meta {
+  padding-bottom: 8px;
+}
+
+.ui.scroll.pane {
+  overflow: auto;
+  max-height: 20em;
+}
+
+.ui.scroll.pane {
+  max-height: 20.78em;
+}
+
+.ui.message:last-child {
+  margin-bottom: 0.3em;
+}
+
+/* Table */
+
+#table {
+  overflow: auto;
+}
+
+/* Table Menu */
+
+.ui.vertical.menu {
+  width: auto;
+}
+
+/* Refresh Button */
+
+button#refresh-button {
+  margin-left: 10px;
+  position: relative;
+  bottom: 2px;
+  float: right;
+}
+
+/* Column Header */
+
+div.item.header {
+  padding-left: 0.5em;
+  font-weight: bold;
+}
+
+/* Column List */
+
+.data-type {
+  margin: 0em 0.3em;
+  padding: 0.2em 0.5em;
+}
+
+.data-type > .type {
+  overflow: auto;
+  margin-left: 6px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* No content */
+
+.no-content {
+  margin: 0em 0.3em;
+  padding: 0.2em 0.5em;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Code */
+
+code.success {
+  padding: 2px;
+  background-color: #E6F2FE;
+  border-radius: 2px;
+}
+
+code.success:hover {
+  cursor: pointer;
+  background-color: #CAE5FF;
+}
+
+code.failed {
+  padding: 2px;
+  background-color: #E6F2FE;
+  border-radius: 2px;
+}
+
+code.failed:hover {
+  cursor: pointer;
+  background-color: #CAE5FF;
+}
+
 
 /* Tiny Modal Width */
 
