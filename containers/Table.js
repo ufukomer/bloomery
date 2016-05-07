@@ -26,6 +26,15 @@ class Table extends Component {
 
   componentDidMount() {
     this.props.showTables();
+    $('.ui.menu')
+      .on('click', '#table-item.item', function () {
+        if (!$(this).hasClass('dropdown')) {
+          $(this)
+            .addClass('active')
+            .siblings('#table-item.item')
+            .removeClass('active');
+        }
+      });
   }
 
   render() {
@@ -42,21 +51,23 @@ class Table extends Component {
     if (isPending) {
       emptyContent = <Loader />;
     } else {
-      emptyContent = <div>No content</div>;
+      emptyContent = <div className="no-content">No content</div>;
     }
 
     return (
         <Menu
           title="Tables"
-          menuType="demo vertical text"
+          menuType="secondary vertical"
         >
           <Item itemType="header">
             <span>Tables</span>
             <Button
+              id="refresh-button"
               onClick={() => {
                 handleRefresh();
                 showTables();
               }}
+              isPending={isPending}
               buttonType="circular basic icon"
               buttonSize="mini"
             >
@@ -68,6 +79,7 @@ class Table extends Component {
             <div>
               {tables.map((table, i) =>
                 <Item
+                  id="table-item"
                   type="link"
                   key={i}
                   onClick={() => onItemClick(table)}
