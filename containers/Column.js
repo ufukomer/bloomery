@@ -29,23 +29,21 @@ class Column extends Component {
     if (isPending) {
       emptyContent = <Loader />;
     } else {
-      emptyContent = <div>No content</div>;
+      emptyContent = <div className="no-content">No content</div>;
     }
 
     return (
-      <div>
+      <div className="columns">
         <Item itemType="header">Columns</Item>
         {isEmpty
           ? emptyContent :
           <List listType="middle aligned divided">
             {columns.map((column, i) =>
               <List.Item key={i}>
-                <List.Content contentType="right floated">
-                  {column.type}
-                </List.Content>
-                <List.Content>
-                  {column.name}
-                </List.Content>
+                <div className="data-type">
+                  <span className="name">{column.name}</span>
+                  <span className="type">({column.type})</span>
+                </div>
               </List.Item>
             )}
           </List>
