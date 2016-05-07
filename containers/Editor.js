@@ -154,12 +154,14 @@ export default class Editor extends Component {
           <Modal.Content>
             <Form id="save-query-form">
               <Field label="Query">
-                <Message visible>
-                  {isCurrentTextEmpty ?
-                    <span>Please write a query on editor!</span> :
+                {isCurrentTextEmpty ?
+                  <Message negative visible>
+                    <span>Please write a query on editor!</span>
+                  </Message> :
+                  <Message visible>
                     <code>{currentText}</code>
-                  }
-                </Message>
+                  </Message>
+                }
               </Field>
               <Field label="Title">
                 <input
@@ -178,34 +180,36 @@ export default class Editor extends Component {
                   placeholder="Description"
                 />
               </Field>
-              <Button
-                buttonType="submit"
-                onClick={() => {
-                  const title = this.refs._title.value;
-                  if (currentText.trim() !== '' && title.trim() !== '') {
-                    try {
-                      return this.props.querySave(
-                        currentText,
-                        title,
-                        this.refs._description.value
-                      );
-                    } catch (error) {
-                      console.error(error);
-                    } finally {
-                      $('.ui .modal').modal('hide');
-                      $('#save-query-form.ui.form').form('clear');
+              <div className="ui two bottom attached buttons">
+                <Button
+                  buttonType="submit"
+                  onClick={() => {
+                    const title = this.refs._title.value;
+                    if (currentText.trim() !== '' && title.trim() !== '') {
+                      try {
+                        return this.props.querySave(
+                          currentText,
+                          title,
+                          this.refs._description.value
+                        );
+                      } catch (error) {
+                        console.error(error);
+                      } finally {
+                        $('.ui .modal').modal('hide');
+                        $('#save-query-form.ui.form').form('clear');
+                      }
                     }
-                  }
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                buttonType="deny"
-                onClick={() => $('.ui .modal').modal('hide')}
-              >
-                Cancel
-              </Button>
+                  }}
+                >
+                  Save
+                </Button>
+                <Button
+                  buttonType="deny"
+                  onClick={() => $('.ui .modal').modal('hide')}
+                >
+                  Cancel
+                </Button>
+              </div>
             </Form>
           </Modal.Content>
         </Modal>
@@ -231,7 +235,7 @@ export default class Editor extends Component {
               </Message> :
               <List listType="middle aligned">
                 {savedQueries.map((query, i) =>
-                  <List.Item key={i}>
+                  <List.Item key={i} listItemType="saved-query-item">
                     <List.Content>
                       <SavedQueryItem
                         title={query.title}

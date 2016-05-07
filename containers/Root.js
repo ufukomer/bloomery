@@ -7,20 +7,20 @@ import Navbar from '../containers/Navbar';
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <div>
+    <div id="app">
       <div id="navbar" className="ui top attached">
-        <Navbar title="Bloomery"/>
+        <Navbar title="Bloomery" />
       </div>
-      <div id="content" className="ui column grid">
-        <div className="stretched row">
+      <div id="content" className="ui column internally celled grid">
+        <div className="stretched two column row">
           <div className="left floated three wide column">
-            <div className="ui attached segment">
+            <div id="table" className="ui segment">
               <Table />
               <Column />
             </div>
           </div>
           <div className="right floated thirteen wide column">
-            <div className="ui attached segment">
+            <div className="ui segment">
               <Editor />
             </div>
           </div>
