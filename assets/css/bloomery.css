@@ -11,6 +11,12 @@
   padding-top: 55px;
 }
 
+/* Dimmer */
+
+.ui.dimmer {
+  background-color: rgba(49,59,67,0.5);
+}
+
 /* Saved Queries */
 
 .saved-query-item {
@@ -56,7 +62,7 @@
 button#refresh-button {
   margin-left: 10px;
   position: relative;
-  bottom: 2px;
+  bottom: 7px;
   float: right;
 }
 
@@ -82,9 +88,15 @@ div.item.header {
 
 /* No content */
 
-.no-content {
+.tables .no-content {
   margin: 0em 0.3em;
-  padding: 0.2em 0.5em;
+  padding: 0em 0.9em;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.columns .no-content {
+  margin: 0em 0.3em;
+  padding: 0.6em 0.5em;
   color: rgba(0, 0, 0, 0.4);
 }
 
