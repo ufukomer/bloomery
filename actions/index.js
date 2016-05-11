@@ -205,6 +205,46 @@ export function showColumnsIfNeeded(table, url = '') {
   };
 }
 
+/* Impala Connection Actions */
+
+function connectionRequest() {
+  return { type: types.CONNECTION_REQUEST };
+}
+
+function connectionSuccess(config, message) {
+  return {
+    type: types.CONNECTION_SUCCESS,
+    config,
+    message
+  };
+}
+
+function connectionFailure(error) {
+  return {
+    type: types.CONNECTION_FAILURE,
+    error
+  };
+}
+
+export function connectImpala(config, url = '') {
+  return dispatch => {
+    dispatch(connectionRequest());
+    return fetch(`${url}/api/impala/config?host=${config.host}&port=${config.port}`)
+      .then((response) => Promise.all([response.status, response.text()]))
+      .then((arr) => {
+        const status = arr[0];
+        const result = arr[1];
+        if (status >= 200 && status < 300) {
+          return dispatch(connectionSuccess(config, result));
+        }
+        return dispatch(connectionFailure(result));
+      })
+      .catch((error) => {
+        connectionFailure(`Execution failed: ${error}`);
+      });
+  };
+}
+
 /* Error Action */
 
 export function resetErrorMessage() {
