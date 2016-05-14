@@ -1,6 +1,6 @@
 import path from 'path';
-import bodyParser from 'body-parser';
 import Express from 'express';
+import bodyParser from 'body-parser';
 import { createClient } from 'node-impala';
 
 import webpack from 'webpack';
@@ -9,9 +9,9 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.config';
 
 const app = new Express();
-const port = 3003;
+const port = process.env.PORT || 3003;
 
-const impala = createClient({ resultType: 'json-array' });
+const client = createClient();
 const compiler = webpack(webpackConfig);
 
 app.use(webpackDevMiddleware(compiler, {
@@ -26,15 +26,27 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+app.get('/api/impala/config', (req, res) => {
+  const config = {
+    host: req.query.host,
+    port: req.query.port,
+    resultType: 'json-array'
+  };
+  client.connect(config).then((result) =>
+    res.status(200).send(result)
+  )
+  .catch(() => res.status(500).send('Connection could not be established.'));
+});
+
 app.get('/api/impala/:sql', (req, res) => {
-  impala.query(req.params.sql)
+  client.query(req.params.sql)
     .then(result => res.status(200).json(result))
     .catch(error => res.status(500).json(error.message));
 });
 
-app.listen(port, (err) => {
-  if (err) {
-    console.error(err);
+app.listen(port, (error) => {
+  if (error) {
+    console.error(error);
   } else {
     console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
   }
