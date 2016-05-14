@@ -86,8 +86,7 @@ describe('query reducer', () => {
             date: receivedAt,
             status: false
           }
-        ],
-        error
+        ]
       });
   });
 

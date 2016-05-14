@@ -66,11 +66,11 @@ describe('table actions', () => {
 
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('TABLE_FAILURE');
+            expect(action[1].type).toEqual('TABLE_FAILURE');
             expect(action[1].error).toBeAn('string');
           } else {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('TABLE_SUCCESS');
+            expect(action[1].type).toEqual('TABLE_SUCCESS');
             expect(action[1].items).toBeAn('object');
           }
         })
@@ -108,11 +108,11 @@ describe('table actions', () => {
 
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('TABLE_FAILURE');
+            expect(action[1].type).toEqual('TABLE_FAILURE');
             expect(action[1].error).toBeAn('string');
           } else {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('TABLE_SUCCESS');
+            expect(action[1].type).toEqual('TABLE_SUCCESS');
             expect(action[1].items).toBeAn('object');
           }
         })

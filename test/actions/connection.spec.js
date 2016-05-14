@@ -45,7 +45,7 @@ describe('impala connection actions', () => {
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
             expect(action[1].type).toEqual('CONNECTION_FAILURE');
-            expect(action[1].error).toBeA('object');
+            expect(action[1].error).toBeA('string');
           } else {
             expect(action[0]).toEqual(expectedAction);
             expect(action[1].type).toEqual('CONNECTION_SUCCESS');

@@ -72,8 +72,7 @@ describe('columnsByTable reducer', () => {
       })).toEqual({
         [table]: {
           isPending: false,
-          items: [],
-          error
+          items: []
         }
       }
     );

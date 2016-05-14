@@ -46,12 +46,12 @@ describe('column actions', () => {
 
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('COLUMN_FAILURE');
+            expect(action[1].type).toEqual('COLUMN_FAILURE');
             expect(action[1].error).toBeAn('string');
             expect(action[1].table).toEqual(table);
           } else {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('COLUMN_SUCCESS');
+            expect(action[1].type).toEqual('COLUMN_SUCCESS');
             expect(action[1].columns).toBeAn('object');
             expect(action[1].table).toEqual(table);
           }
@@ -97,12 +97,12 @@ describe('column actions', () => {
 
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('COLUMN_FAILURE');
+            expect(action[1].type).toEqual('COLUMN_FAILURE');
             expect(action[1].error).toBeAn('string');
             expect(action[1].table).toEqual(table);
           } else {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('COLUMN_SUCCESS');
+            expect(action[1].type).toEqual('COLUMN_SUCCESS');
             expect(action[1].columns).toBeAn('object');
             expect(action[1].table).toEqual(table);
           }

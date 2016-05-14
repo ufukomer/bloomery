@@ -76,12 +76,12 @@ describe('query actions', () => {
 
           if (action[1].error) {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('QUERY_FAILURE');
-            expect(action[1].error).toBeAn('string');
+            expect(action[1].type).toEqual('QUERY_FAILURE');
+            expect(action[1].error).toBeA('string');
             expect(action[1].sql).toBeA('string');
           } else {
             expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toContain('QUERY_SUCCESS');
+            expect(action[1].type).toEqual('QUERY_SUCCESS');
             expect(action[1].receivedAt).toBeA('number');
             expect(action[1].result).toBeAn('object');
             expect(action[1].sql).toBeA('string');

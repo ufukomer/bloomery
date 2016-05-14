@@ -51,7 +51,8 @@ describe('connection reducer', () => {
       reducer({}, {
         type: types.CONNECTION_FAILURE
       })).toEqual({
-        isConnecting: false
+        isConnecting: false,
+        isConnected: false
       }
     );
   });

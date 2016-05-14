@@ -77,7 +77,6 @@ describe('tables reducer', () => {
         error
       })).toEqual({
         isPending: false,
-        error,
         didInvalidate: true
       }
     );
