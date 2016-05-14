@@ -1,10 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const port = 3003;
+const port = process.env.PORT || 3003;
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   entry: [
     'webpack-hot-middleware/client',
     './index'

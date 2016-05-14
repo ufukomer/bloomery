@@ -9,13 +9,12 @@ window.jQuery = jQuery;
 
 require('./assets/css/index.css');
 
-require('./semantic/dist/components/tab');
-require('./semantic/dist/components/form');
-require('./semantic/dist/components/modal');
-require('./semantic/dist/components/popup');
-require('./semantic/dist/components/state');
-require('./semantic/dist/components/dimmer');
-require('./semantic/dist/components/transition');
+require('semantic-ui-tab/tab.min.js');
+require('semantic-ui-form/form.min.js');
+require('semantic-ui-modal/modal.min.js');
+require('semantic-ui-popup/popup.min.js');
+require('semantic-ui-dimmer/dimmer.min.js');
+require('semantic-ui-transition/transition.min.js');
 
 const store = configureStore();
 
