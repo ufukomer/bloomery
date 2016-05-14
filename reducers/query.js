@@ -71,7 +71,6 @@ export default function query(state = {
         ...state,
         isPending: false,
         lastQuery: action.sql,
-        error: action.error,
         recentQueries: recentQuery(state.recentQueries, action)
       };
     case QUERY_SAVE:

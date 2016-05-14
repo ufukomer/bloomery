@@ -1,9 +1,10 @@
-import * as types from '../constants';
-import columnsByTable from './columns';
-import query from './query';
-import { tables, selectedTable } from './tables';
-import text from './text';
 import { combineReducers } from 'redux';
+import * as types from '../constants';
+import { tables, selectedTable } from './tables';
+import columnsByTable from './columns';
+import connection from './connection';
+import query from './query';
+import text from './text';
 
 function errorMessage(state = null, action) {
   const { type, error } = action;
@@ -18,10 +19,11 @@ function errorMessage(state = null, action) {
 }
 
 const rootReducer = combineReducers({
-  errorMessage,
   columnsByTable,
-  tables,
   selectedTable,
+  errorMessage,
+  connection,
+  tables,
   query,
   text
 });

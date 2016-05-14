@@ -41,7 +41,6 @@ export function tables(state = {
       return {
         ...state,
         isPending: false,
-        error: action.error,
         didInvalidate: true
       };
     default:

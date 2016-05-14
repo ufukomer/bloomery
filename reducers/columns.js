@@ -23,8 +23,7 @@ function columns(state = {
     case COLUMN_FAILURE:
       return {
         ...state,
-        isPending: false,
-        error: action.error
+        isPending: false
       };
     default:
       return state;
