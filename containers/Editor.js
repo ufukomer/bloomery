@@ -16,6 +16,7 @@ import Field from '../components/Field';
 import Modal from '../components/Modal';
 import Button from '../components/Button';
 import Message from '../components/Message';
+import Divider from '../components/Divider';
 import AceEditor from '../components/AceEditor';
 import ScrollPane from '../components/ScrollPane';
 import TabSegment from '../components/TabSegment';
@@ -27,15 +28,16 @@ import 'brace/mode/sql';
 import 'brace/theme/dawn';
 import 'brace/ext/language_tools';
 
-export default class Editor extends Component {
+class Editor extends Component {
 
   static propTypes = {
     result: PropTypes.array,
     isPending: PropTypes.bool,
     lastQuery: PropTypes.string,
     currentText: PropTypes.string,
-    recentQueries: PropTypes.array,
     savedQueries: PropTypes.array,
+    recentQueries: PropTypes.array,
+    isConnected: PropTypes.bool.isRequired,
     querySave: PropTypes.func.isRequired,
     queryDelete: PropTypes.func.isRequired,
     executeQuery: PropTypes.func.isRequired,
@@ -43,14 +45,11 @@ export default class Editor extends Component {
   }
 
   componentDidMount() {
-    // Save query
-    $('.ui.modal').modal({ detachable: false });
-    $('.ui.modal').modal('attach events', '#save-button', 'show');
+    // Save query modal
+    $('#save-query-modal.ui.modal').modal({ detachable: false });
+    $('#save-query-modal.ui.modal').modal('attach events', '#save-button', 'show');
 
-    // Dimmer color
-    $('.dimmer').css('background-color', 'rgba(49,59,67,0.5)');
-
-    // From validation
+    // Form validation
     $('#save-query-form.ui.form').form({
       inline: true,
       on: 'blur',
@@ -79,6 +78,7 @@ export default class Editor extends Component {
 
   render() {
     const {
+      isConnected,
       result,
       isPending,
       lastQuery,
@@ -102,6 +102,7 @@ export default class Editor extends Component {
           value={currentText}
           editorProps={{ $blockScrolling: Infinity }}
           showPrintMargin={false}
+          enableLiveAutocompletion
           enableBasicAutocompletion
           ref="_editor"
         />
@@ -129,7 +130,7 @@ export default class Editor extends Component {
             </Item>
             <Item type="link">
               <Button
-                isPending={isPending}
+                isPending={isPending && isConnected}
                 onClick={() => {
                   const editorText = this.refs._editor.getQuery()
                       .replace(/(?:\r\n|\r|\n)/g, ' \n');
@@ -146,6 +147,7 @@ export default class Editor extends Component {
         </Menu>
 
         <Modal
+          id="save-query-modal"
           closeIcon modalSize="tiny"
         >
           <Modal.Header>
@@ -153,7 +155,7 @@ export default class Editor extends Component {
           </Modal.Header>
           <Modal.Content>
             <Form id="save-query-form">
-              <Field label="Query">
+              <Field required label="Query">
                 {isCurrentTextEmpty ?
                   <Message negative visible>
                     <span>Please write a query on editor!</span>
@@ -163,7 +165,7 @@ export default class Editor extends Component {
                   </Message>
                 }
               </Field>
-              <Field label="Title">
+              <Field required label="Title">
                 <input
                   ref="_title"
                   type="text"
@@ -180,6 +182,7 @@ export default class Editor extends Component {
                   placeholder="Description"
                 />
               </Field>
+              <Divider />
               <div className="ui two bottom attached buttons">
                 <Button
                   buttonType="submit"
@@ -195,7 +198,7 @@ export default class Editor extends Component {
                       } catch (error) {
                         console.error(error);
                       } finally {
-                        $('.ui .modal').modal('hide');
+                        $('#save-query-modal.ui.modal').modal('hide');
                         $('#save-query-form.ui.form').form('clear');
                       }
                     }
@@ -205,7 +208,9 @@ export default class Editor extends Component {
                 </Button>
                 <Button
                   buttonType="deny"
-                  onClick={() => $('.ui .modal').modal('hide')}
+                  onClick={() =>
+                    $('#save-query-modal.ui.modal').modal('hide')
+                  }
                 >
                   Cancel
                 </Button>
@@ -241,7 +246,7 @@ export default class Editor extends Component {
                         title={query.title}
                         description={query.description}
                         query={query.sql}
-                        isPending={isPending}
+                        isPending={isPending && isConnected}
                         onRunClick={() => {
                           const editorText = this.refs._editor.getQuery()
                               .replace(/(?:\r\n|\r|\n)/g, ' \n');
@@ -285,7 +290,7 @@ export default class Editor extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { query, text } = state;
+  const { query, text, connection } = state;
 
   return {
     currentText: text,
@@ -293,7 +298,8 @@ const mapStateToProps = (state) => {
     isPending: query.isPending,
     lastQuery: query.lastQuery,
     recentQueries: query.recentQueries,
-    savedQueries: query.savedQueries
+    savedQueries: query.savedQueries,
+    isConnected: connection.isConnected
   };
 };
 

@@ -17,6 +17,7 @@ import Loader from '../components/Loader';
 class Table extends Component {
 
   static propTypes = {
+    isConnected: PropTypes.bool.isRequired,
     tables: PropTypes.array.isRequired,
     isPending: PropTypes.bool.isRequired,
     showTables: PropTypes.func.isRequired,
@@ -25,7 +26,10 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    this.props.showTables();
+    const { isConnected, showTables } = this.props;
+    if (isConnected) {
+      showTables();
+    }
     $('.ui.menu')
       .on('click', '#table-item.item', function () {
         if (!$(this).hasClass('dropdown')) {
@@ -37,8 +41,16 @@ class Table extends Component {
       });
   }
 
+  componentDidUpdate() {
+    const { isConnected, showTables } = this.props;
+    if (isConnected) {
+      showTables();
+    }
+  }
+
   render() {
     const {
+      isConnected,
       tables,
       isPending,
       showTables,
@@ -48,7 +60,7 @@ class Table extends Component {
     const isEmpty = tables.length === 0;
 
     let emptyContent;
-    if (isPending) {
+    if (isPending && isConnected) {
       emptyContent = <Loader />;
     } else {
       emptyContent = <div className="no-content">No content</div>;
@@ -57,7 +69,7 @@ class Table extends Component {
     return (
         <Menu
           title="Tables"
-          menuType="secondary vertical"
+          menuType="secondary vertical tables"
         >
           <Item itemType="header">
             <span>Tables</span>
@@ -67,7 +79,7 @@ class Table extends Component {
                 handleRefresh();
                 showTables();
               }}
-              isPending={isPending}
+              isPending={isPending && isConnected}
               buttonType="circular basic icon"
               buttonSize="mini"
             >
@@ -93,11 +105,12 @@ class Table extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { tables } = state;
+  const { tables, connection } = state;
 
   return {
     tables: tables.items,
-    isPending: tables.isPending
+    isPending: tables.isPending,
+    isConnected: connection.isConnected
   };
 };
 

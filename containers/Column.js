@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 class Column extends Component {
 
   static propTypes = {
+    isConnected: PropTypes.bool.isRequired,
     isPending: PropTypes.bool.isRequired,
     columns: PropTypes.array.isRequired,
     selectedTable: PropTypes.string.isRequired,
@@ -22,11 +23,11 @@ class Column extends Component {
   }
 
   render() {
-    const { isPending, columns } = this.props;
+    const { isPending, columns, isConnected } = this.props;
     const isEmpty = columns.length === 0;
 
     let emptyContent;
-    if (isPending) {
+    if (isPending && isConnected) {
       emptyContent = <Loader />;
     } else {
       emptyContent = <div className="no-content">No content</div>;
@@ -54,7 +55,7 @@ class Column extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { columnsByTable, selectedTable } = state;
+  const { columnsByTable, selectedTable, connection } = state;
   const {
     isPending,
     items: columns
@@ -64,6 +65,7 @@ const mapStateToProps = (state) => {
   };
 
   return {
+    isConnected: connection.isConnected,
     selectedTable,
     isPending,
     columns
