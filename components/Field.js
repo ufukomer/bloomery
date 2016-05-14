@@ -3,9 +3,11 @@ import classnames from 'classnames';
 
 const Field = ({
   label,
+  required,
   children
 }) => {
   let fieldClass = classnames({
+    required,
     field: true
   });
 
@@ -19,6 +21,7 @@ const Field = ({
 
 Field.propTypes = {
   children: PropTypes.any,
+  required: PropTypes.bool,
   label: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
