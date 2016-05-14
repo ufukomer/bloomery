@@ -11,6 +11,12 @@
   padding-top: 55px;
 }
 
+/* Body */
+
+body {
+  background-color: #fdfdfd;
+}
+
 /* Dimmer */
 
 .ui.dimmer {
@@ -100,6 +106,32 @@ div.item.header {
   color: rgba(0, 0, 0, 0.4);
 }
 
+/* Required Field */
+
+.ui.form .required.fields:not(.grouped) >
+.field > label:after, .ui.form
+.required.fields.grouped > label:after,
+.ui.form .required.field > label:after,
+.ui.form .required.fields:not(.grouped) >
+.field > .checkbox:after, .ui.form
+.required.field > .checkbox:after {
+  margin: -0.2em 0em 0em 0.2em;
+  content: '*';
+  color: #9F3A38;
+}
+
+/* Connection Messages */
+
+.connected-message {
+  margin-left: 15px;
+  color: #49C466;
+}
+
+.disconnected-message {
+  margin-left: 15px;
+  color: #DB2828;
+}
+
 /* Code */
 
 code.success {
@@ -124,6 +156,15 @@ code.failed:hover {
   background-color: #CAE5FF;
 }
 
+/* Disabled */
+.disabled {
+  display: none;
+}
+
+/* Segment */
+div.ui.segment {
+  margin-top: 0;
+}
 
 /* Tiny Modal Width */
 

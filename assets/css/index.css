@@ -5,7 +5,7 @@
 /*  Semantic UI Elements */
 @import '~semantic-ui-button/button.css';
 @import '~semantic-ui-container/container.css';
-/*@import '~semantic-ui-divider/divider.css';*/
+@import '~semantic-ui-divider/divider.css';
 /*@import '~semantic-ui-flag/flag.css';*/
 @import '~semantic-ui-header/header.css';
 @import '~semantic-ui-icon/icon.css';
