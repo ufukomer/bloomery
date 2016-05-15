@@ -2,7 +2,7 @@ import http from 'http';
 import expect from 'expect';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import * as actions from '../../actions/index';
+import * as actions from '../../src/actions/index';
 import * as types from '../../constants';
 import app from '../../server/server';
 

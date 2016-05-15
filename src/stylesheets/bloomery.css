@@ -136,24 +136,24 @@ div.item.header {
 
 code.success {
   padding: 2px;
-  background-color: #E6F2FE;
+  background-color: #E8EEF5;
   border-radius: 2px;
 }
 
 code.success:hover {
   cursor: pointer;
-  background-color: #CAE5FF;
+  background-color: #E6F2FE;
 }
 
 code.failed {
   padding: 2px;
-  background-color: #E6F2FE;
+  background-color: #E8EEF5;
   border-radius: 2px;
 }
 
 code.failed:hover {
   cursor: pointer;
-  background-color: #CAE5FF;
+  background-color: #E6F2FE;
 }
 
 /* Disabled */
