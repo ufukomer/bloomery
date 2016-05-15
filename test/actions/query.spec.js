@@ -3,7 +3,7 @@ import expect from 'expect';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as actions from '../../src/actions/index';
-import * as types from '../../constants';
+import * as types from '../../src/constants';
 import app from '../../server/server';
 
 const middlewares = [thunk];

@@ -1,6 +1,6 @@
 import expect from 'expect';
-import reducer from '../../reducers/columns';
-import * as types from '../../constants';
+import reducer from '../../src/reducers/columns';
+import * as types from '../../src/constants';
 
 describe('columnsByTable reducer', () => {
   it('should return the initial state', () => {

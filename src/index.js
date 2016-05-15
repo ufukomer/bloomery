@@ -7,7 +7,7 @@ import $ from 'jquery';
 import jQuery from 'jquery';
 window.jQuery = jQuery;
 
-require('./assets/css/index.css');
+require('./stylesheets/index.css');
 
 require('semantic-ui-tab/tab.min.js');
 require('semantic-ui-form/form.min.js');

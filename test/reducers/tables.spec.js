@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { tables, selectedTable } from '../../reducers/tables';
-import * as types from '../../constants';
+import { tables, selectedTable } from '../../src/reducers/tables';
+import * as types from '../../src/constants';
 
 describe('selectedTable reducer', () => {
   it('should return initial state', () => {

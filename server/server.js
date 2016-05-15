@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../src/index.html'));
 });
 
 app.get('/api/impala/config', (req, res) => {
@@ -32,10 +32,9 @@ app.get('/api/impala/config', (req, res) => {
     port: req.query.port,
     resultType: 'json-array'
   };
-  client.connect(config).then((result) =>
-    res.status(200).send(result)
-  )
-  .catch(() => res.status(500).send('Connection could not be established.'));
+  client.connect(config)
+    .then((result) => res.status(200).send(result))
+    .catch(() => res.status(500).send('Connection could not be established.'));
 });
 
 app.get('/api/impala/:sql', (req, res) => {

@@ -1,6 +1,6 @@
 import expect from 'expect';
-import reducer from '../../reducers/query';
-import * as types from '../../constants';
+import reducer from '../../src/reducers/query';
+import * as types from '../../src/constants';
 
 describe('query reducer', () => {
   it('should return the initial state', () => {

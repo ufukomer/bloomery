@@ -1,6 +1,6 @@
 import expect from 'expect';
-import reducer from '../../reducers/connection';
-import * as types from '../../constants';
+import reducer from '../../src/reducers/connection';
+import * as types from '../../src/constants';
 
 describe('connection reducer', () => {
   it('should return the initial state', () => {
