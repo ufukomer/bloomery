@@ -1,1 +1,5 @@
-**/semantic/*
+**/node_modules/*
+**/dist/*
+/webpack.prod.config.js
+/webpack.dev.config.js
+/server.babel.js
