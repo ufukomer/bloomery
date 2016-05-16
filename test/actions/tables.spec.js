@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as actions from '../../src/actions/index';
 import * as types from '../../src/constants';
-import app from '../../server/server';
+import app from '../../src/server';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

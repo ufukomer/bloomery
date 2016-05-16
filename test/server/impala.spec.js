@@ -1,7 +1,7 @@
 import http from 'http';
 import expect from 'expect';
 import request from 'superagent';
-import app from '../../server/server';
+import app from '../../src/server';
 
 describe('impala rest api', () => {
   const sql = 'select * from sample_07 limit 5';
