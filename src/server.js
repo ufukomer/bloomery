@@ -6,7 +6,7 @@ import { createClient } from 'node-impala';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackConfig from '../webpack.config.js';
+import webpackConfig from '../webpack.dev.config.js';
 
 const app = new Express();
 const port = process.env.PORT || 3003;
@@ -49,11 +49,11 @@ app.get('/api/impala/:sql', (req, res) => {
     .catch(error => res.status(500).json(error.message));
 });
 
-app.listen(port, (error) => {
+const server = app.listen(port, (error) => {
   if (error) {
     console.error(error);
   } else {
-    console.info('==> Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+    console.info('Listening on port %s...', server.address().port);
   }
 });
 
