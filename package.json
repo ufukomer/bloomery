@@ -2,7 +2,7 @@
   "name": "bloomery",
   "version": "0.0.0",
   "description": "WebUI for Impala",
-  "main": "sever/index.js",
+  "main": "sever.babel.js",
   "scripts": {
     "start": "node server.babel.js",
     "build": "npm run clean && npm run build:client",
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/ufukomer/bloomery/issues"
   },
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "babel-polyfill": "^6.7.4",
     "babel-register": "^6.7.2",
