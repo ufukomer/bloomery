@@ -37,12 +37,13 @@ export function executeQuery(sql, url = '') {
         const status = arr[0];
         const result = arr[1];
         if (status >= 200 && status < 300) {
-          return dispatch(querySuccess(sql, result));
+          dispatch(querySuccess(sql, result));
+        } else {
+          dispatch(queryFailure(sql, result));
         }
-        return dispatch(queryFailure(sql, result));
       })
       .catch((error) => {
-        queryFailure(`Execution failed: ${error}`);
+        dispatch(queryFailure(`Execution failed: ${error}`));
       });
   };
 }
@@ -110,12 +111,13 @@ function showTables(url = '') {
         const status = arr[0];
         const result = arr[1];
         if (status >= 200 && status < 300) {
-          return dispatch(tableSuccess(result));
+          dispatch(tableSuccess(result));
+        } else {
+          dispatch(tableFailure(result));
         }
-        return dispatch(tableFailure(result));
       })
       .catch((error) => {
-        tableFailure(`Execution failed: ${error}`);
+        dispatch(tableFailure(`Execution failed: ${error}`));
       });
   };
 }
@@ -171,17 +173,20 @@ function showColumns(table, url = '') {
   return dispatch => {
     dispatch(columnRequest(table));
     return fetch(`${url}/api/impala/show column stats ${table}`)
-      .then((response) => Promise.all([response.status, response.json()]))
+      .then((response) =>
+        Promise.all([response.status, response.json()])
+      )
       .then((arr) => {
         const status = arr[0];
         const result = arr[1];
         if (status >= 200 && status < 300) {
-          return dispatch(columnSuccess(table, result));
+          dispatch(columnSuccess(table, result));
+        } else {
+          dispatch(columnFailure(table, result));
         }
-        return dispatch(columnFailure(table, result));
       })
       .catch((error) => {
-        columnFailure(`Execution failed: ${error}`);
+        dispatch(columnFailure(`Execution failed: ${error}`));
       });
   };
 }
@@ -235,12 +240,13 @@ export function connectImpala(config, url = '') {
         const status = arr[0];
         const result = arr[1];
         if (status >= 200 && status < 300) {
-          return dispatch(connectionSuccess(config, result));
+          dispatch(connectionSuccess(config, result));
+        } else {
+          dispatch(connectionFailure(result));
         }
-        return dispatch(connectionFailure(result));
       })
       .catch((error) => {
-        connectionFailure(`Execution failed: ${error}`);
+        dispatch(connectionFailure(`Execution failed: ${error}`));
       });
   };
 }
