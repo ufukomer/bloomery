@@ -137,7 +137,8 @@ div.item.header {
 code.success {
   padding: 2px;
   background-color: #E8EEF5;
-  border-radius: 2px;
+  border: 1px solid #F9F9F9;
+  border-radius: 5px;
 }
 
 code.success:hover {
@@ -148,7 +149,8 @@ code.success:hover {
 code.failed {
   padding: 2px;
   background-color: #E8EEF5;
-  border-radius: 2px;
+  border: 1px solid #F9F9F9;
+  border-radius: 5px;
 }
 
 code.failed:hover {
