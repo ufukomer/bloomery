@@ -1,10 +1,9 @@
-import http from 'http';
+import nock from 'nock';
 import expect from 'expect';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import * as actions from '../../src/actions/index';
 import * as types from '../../src/constants';
-import app from '../../src/server';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -43,49 +42,43 @@ describe('query actions', () => {
   });
 
   describe('executeQuery', () => {
-    const sql = 'select * from sample_07 limit 5';
+    const sql = 'select * from sample_07 limit 1';
     const port = 3333;
     const url = `http://localhost:${port}`;
-    const server = http.createServer(app);
 
-    before((done) => {
-      server.listen(port, (err) => {
-        if (err) {
-          done(err);
-        } else {
-          done();
-        }
-      });
+    afterEach(() => {
+      nock.cleanAll();
     });
 
-    after((done) => {
-      server.close();
-      done();
-    });
-
-    it('should create QUERY_REQUEST and QUERY_SUCCESS or QUERY_FAILURE', (done) => {
-      const expectedAction = {
-        type: types.QUERY_REQUEST,
-        sql
-      };
+    it('should create QUERY_REQUEST and QUERY_SUCCESS', (done) => {
+      const expectedAction = { type: types.QUERY_REQUEST, sql };
       const store = mockStore({});
 
-      store.dispatch(actions.executeQuery(sql, url))
+      nock(url)
+        .get(`/api/impala/${encodeURIComponent(sql)}`)
+        .reply(200, [
+          {
+            code: '00-0000',
+            description: 'All Occupations',
+            total_emp: '134354250',
+            salary: '40690'
+          }
+        ]);
+
+      return store.dispatch(actions.executeQuery(sql, url))
         .then(() => {
           const action = store.getActions();
 
-          if (action[1].error) {
-            expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toEqual('QUERY_FAILURE');
-            expect(action[1].error).toBeA('string');
-            expect(action[1].sql).toBeA('string');
-          } else {
-            expect(action[0]).toEqual(expectedAction);
-            expect(action[1].type).toEqual('QUERY_SUCCESS');
-            expect(action[1].receivedAt).toBeA('number');
-            expect(action[1].result).toBeAn('object');
-            expect(action[1].sql).toBeA('string');
-          }
+          expect(action[0]).toEqual(expectedAction);
+          expect(action[1].receivedAt).toExist();
+          expect(action[1].type).toEqual('QUERY_SUCCESS');
+          expect(action[1].result).toEqual([{
+            code: '00-0000',
+            description: 'All Occupations',
+            total_emp: '134354250',
+            salary: '40690'
+          }]);
+          expect(action[1].sql).toEqual(sql);
         })
         .then(done)
         .catch(done);
