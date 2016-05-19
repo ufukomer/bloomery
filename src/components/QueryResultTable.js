@@ -27,6 +27,7 @@ const QueryResultTable = ({
     <table className={queryTableClass}>
       <thead>
       <tr>
+        <th></th>
         {Object.keys(result[0]).map((column, i) =>
           <th key={i}>{column}</th>
         )}
@@ -35,6 +36,9 @@ const QueryResultTable = ({
       <tbody>
       {values.map((row, i) =>
         <tr key={i}>
+          <td>
+            {i}
+          </td>
           {row.map((item, j) =>
             <td key={j}>
               {item}
