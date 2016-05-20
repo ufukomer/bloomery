@@ -31,7 +31,7 @@ const App = ({ children }) => (
 );
 
 App.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.any
 };
 
 export default App;
