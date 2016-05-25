@@ -26,7 +26,7 @@ Bloomery has the following features:
 
 Bloomery communicates with node-impala using Express Rest API. Express Rest API maps URLs with node-impala’s connect and query methods. Then the actions like _executeQuery_, _showTables_, _showColumns_ sends query with request parameters to Rest API then Express forwards that query to node-impala which handles and returns results using Thrift. Eventually, Express puts this results to response body which we present to users inside the table under results tab of ui menu.
 
-![Bloomery Architecture](screenshots/architecture.png)
+![Bloomery Architecture](screenshots/architecture.jpg)
 
 ## Requirements
 
@@ -37,19 +37,19 @@ Bloomery communicates with node-impala using Express Rest API. Express Rest API 
 ## Installation
 
 1. Install dependencies 
-```
-$ npm install
-```
+  ```
+  $ npm install
+  ```
 
-2. Build Bloomery
-```
-$ npm run build
-```
+1. Build Bloomery
+  ```
+  $ npm run build
+  ```
 
-3. Start server
-```
-$ npm run serve
-```
+1. Start server
+  ```
+  $ npm run serve
+  ```
 
 ## License
 
