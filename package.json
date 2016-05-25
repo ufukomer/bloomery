@@ -1,7 +1,7 @@
 {
   "name": "bloomery",
   "version": "0.0.0",
-  "description": "WebUI for Impala",
+  "description": "WebUI for Impala.",
   "main": "sever.babel.js",
   "scripts": {
     "start": "node server.babel.js",
@@ -13,12 +13,14 @@
     "test:watch": "npm test -- --watch"
   },
   "keywords": [
-    "WebUI",
-    "Impala",
-    "Client",
-    "React",
-    "Redux",
-    "Webpack"
+    "bloomery",
+    "webui",
+    "impala",
+    "node",
+    "client",
+    "react",
+    "redux",
+    "webpack"
   ],
   "author": "Ömer Ufuk Efendioğlu <ufukomer@gmail.com> (http://ufukomer.com)",
   "contributors": [
@@ -36,8 +38,14 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "babel-core": "^6.7.4",
+    "babel-loader": "^6.2.4",
     "babel-polyfill": "^6.7.4",
     "babel-register": "^6.7.2",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
     "body-parser": "^1.15.0",
     "brace": "^0.8.0",
     "classnames": "^2.2.3",
@@ -53,6 +61,7 @@
     "redux-storage-decorator-filter": "^1.1.3",
     "redux-storage-engine-localstorage": "^1.1.0",
     "redux-thunk": "^2.0.1",
+    "rimraf": "^2.5.2",
     "semantic-ui-button": "^2.1.7",
     "semantic-ui-container": "^2.1.7",
     "semantic-ui-dimmer": "^2.1.7",
@@ -79,14 +88,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
-    "babel-core": "^6.7.4",
     "babel-eslint": "^6.0.2",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.5.0",
-    "babel-preset-stage-0": "^6.5.0",
-    "babel-preset-stage-2": "^6.5.0",
-    "babel-register": "^6.7.2",
     "css-loader": "^0.23.1",
     "eslint": "^2.6.0",
     "eslint-config-airbnb": "^6.2.0",
@@ -107,7 +109,6 @@
     "redux-devtools-log-monitor": "^1.0.11",
     "redux-logger": "^2.6.1",
     "redux-mock-store": "^1.0.2",
-    "rimraf": "^2.5.2",
     "style-loader": "^0.13.1",
     "supertest": "^1.2.0",
     "url-loader": "^0.5.7",
@@ -115,5 +116,8 @@
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.10.0"
+  },
+  "engines": {
+    "node": "5.10.1"
   }
 }
