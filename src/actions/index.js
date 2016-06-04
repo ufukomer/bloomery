@@ -32,7 +32,9 @@ export function executeQuery(sql, url = '') {
   return dispatch => {
     dispatch(queryRequest(sql));
     return fetch(`${url}/api/impala/${sql}`)
-      .then((response) => Promise.all([response.status, response.json()]))
+      .then((response) =>
+        Promise.all([response.status, response.json()])
+      )
       .then((arr) => {
         const status = arr[0];
         const result = arr[1];
@@ -106,7 +108,9 @@ function showTables(url = '') {
   return dispatch => {
     dispatch(tableRequest());
     return fetch(`${url}/api/impala/show tables`)
-      .then((response) => Promise.all([response.status, response.json()]))
+      .then((response) =>
+        Promise.all([response.status, response.json()])
+      )
       .then((arr) => {
         const status = arr[0];
         const result = arr[1];
@@ -235,7 +239,9 @@ export function connectImpala(config, url = '') {
   return dispatch => {
     dispatch(connectionRequest());
     return fetch(`${url}/api/impala/config?host=${config.host}&port=${config.port}`)
-      .then((response) => Promise.all([response.status, response.text()]))
+      .then((response) =>
+        Promise.all([response.status, response.text()])
+      )
       .then((arr) => {
         const status = arr[0];
         const result = arr[1];
