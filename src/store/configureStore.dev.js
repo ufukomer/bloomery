@@ -23,6 +23,7 @@ export default function configureStore(initialState) {
   );
   const store = createStore(
     reducer(rootReducer),
+    initialState,
     compose(
       applyMiddleware(
         thunkMiddleware,
@@ -30,8 +31,7 @@ export default function configureStore(initialState) {
         createMiddleware(engine, [], includedActions)
       ),
       DevTools.instrument()
-    ),
-    initialState
+    )
   );
 
   createLoader(engine)(store);

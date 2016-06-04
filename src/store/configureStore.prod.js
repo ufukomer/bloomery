@@ -21,11 +21,11 @@ export default function configureStore(initialState) {
   );
   const store = createStore(
     reducer(rootReducer),
+    initialState,
     applyMiddleware(
       thunkMiddleware,
       createMiddleware(engine, [], includedActions)
-    ),
-    initialState
+    )
   );
 
   createLoader(engine)(store);
