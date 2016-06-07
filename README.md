@@ -32,7 +32,6 @@ Bloomery communicates with node-impala using Express Rest API. Express Rest API 
 
 * Node.js
 * Impala
-* Webpack
 
 ## Installation
 
