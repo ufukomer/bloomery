@@ -1,7 +1,7 @@
 {
   "name": "bloomery",
   "version": "0.0.0",
-  "description": "Web UI for Impala.",
+  "description": "Web UI for Impala",
   "main": "sever.babel.js",
   "scripts": {
     "start": "node server.babel.js",
