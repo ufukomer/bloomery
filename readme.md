@@ -36,16 +36,19 @@ Bloomery communicates with node-impala using Express Rest API. Express Rest API 
 ## Installation
 
 1. Install dependencies 
+
   ```
   $ npm install
   ```
 
-1. Build Bloomery
+2. Build Bloomery
+
   ```
   $ npm run build
   ```
 
-1. Start server
+3. Start server
+
   ```
   $ npm run serve
   ```
