@@ -15,7 +15,7 @@ Bloomery has the following features:
 
 * _Syntax highlighting:_ On the web ui, the editor immediately highlights the sql keywords (e.g select, from, as, where, group, etc.) after the user types it.
 * _Autocomplete:_ While user typing any of the sql keywords, the editor’s suggestion dropdown pops up.
-* _Saved queries:_ It is possible save any query using save query section.
+* _Saved queries:_ It is possible to save any query using save query section.
 * _Query history:_ Application saves the all recent queries.
 * _Show query results:_ Shows all results under the results tab.
 * _Remote connection:_ User can change connection settings for the purpose of connecting server from different machine either with different Host IP or Port Number.
